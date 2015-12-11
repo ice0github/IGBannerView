@@ -160,7 +160,7 @@ static const NSInteger TAG_OF_TITLE_VIEW = 2000;
             [imageView sd_setImageWithURL:(NSURL*)tmpImage
                          placeholderImage:_placeholderImage];
             
-        }else if (tmpImage && [tmpImage isKindOfClass:[NSString class]]){
+        }else if (tmpImage && [tmpImage isKindOfClass:[NSString class]] && [tmpImage length] > 0){
             [imageView sd_setImageWithURL:[NSURL URLWithString:tmpImage]
                          placeholderImage:_placeholderImage];
             

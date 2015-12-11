@@ -41,6 +41,34 @@ typedef NS_ENUM(NSInteger, ReloadButtonType) {
 - (void)buildUI{
     self.view.backgroundColor = [UIColor whiteColor];
     
+    [self setupActionButton];
+
+    
+    banner = [[IGBannerView alloc] initWithFrame:CGRectMake(0, 60, self.view.bounds.size.width, 200)
+                                              bannerItem:[IGBannerItem itemWithTitle:@"标题1"
+                                                                               image:[UIImage imageNamed:@"lm_0"]
+                                                                                 tag:0],
+                      [IGBannerItem itemWithTitle:nil
+                                            image:[UIImage imageNamed:@"lm_1"]
+                                              tag:1],
+                      [IGBannerItem itemWithTitle:@"标题3"
+                                            image:[UIImage imageNamed:@"lm_2"]
+                                              tag:2],
+                      nil];
+    
+    banner.delegate      = self;
+    [self.view addSubview:banner];
+    
+
+    UITableView *table    = [[UITableView alloc] init];
+    table.frame           = CGRectMake(0, 60+200, self.view.bounds.size.width, self.view.bounds.size.height-60-200);
+    table.dataSource      = self;
+    table.delegate        = self;
+    table.allowsSelection = NO;
+    [self.view addSubview:table];
+}
+
+- (void)setupActionButton{
     UIButton *reloadBannerButton = nil;
     
     reloadBannerButton = [UIButton buttonWithType:UIButtonTypeSystem];
@@ -66,33 +94,9 @@ typedef NS_ENUM(NSInteger, ReloadButtonType) {
     [allowRunloopDelay setTitle:@"Delay" forState:UIControlStateNormal];
     [allowRunloopDelay setTitle:@"Real" forState:UIControlStateSelected];
     [allowRunloopDelay addTarget:self
-                           action:@selector(handleRunloopButtonClicked:)
-                 forControlEvents:UIControlEventTouchUpInside];
+                          action:@selector(handleRunloopButtonClicked:)
+                forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:allowRunloopDelay];
-
-    
-    banner = [[IGBannerView alloc] initWithFrame:CGRectMake(0, 60, self.view.bounds.size.width, 200)
-                                              bannerItem:[IGBannerItem itemWithTitle:@"标题1"
-                                                                               image:[UIImage imageNamed:@"lm_0"]
-                                                                                 tag:0],
-                      [IGBannerItem itemWithTitle:nil
-                                            image:[UIImage imageNamed:@"lm_1"]
-                                              tag:1],
-                      [IGBannerItem itemWithTitle:@"标题3"
-                                            image:[UIImage imageNamed:@"lm_2"]
-                                              tag:2],
-                      nil];
-    
-    banner.delegate      = self;
-    [self.view addSubview:banner];
-    
-
-    UITableView *table    = [[UITableView alloc] init];
-    table.frame           = CGRectMake(0, 60+200, self.view.bounds.size.width, self.view.bounds.size.height-60-200);
-    table.dataSource      = self;
-    table.delegate        = self;
-    table.allowsSelection = NO;
-    [self.view addSubview:table];
 }
 
 #pragma mark - ----> Banner Delegate
@@ -132,7 +136,10 @@ static NSString *cellID = @"BannerTest";
 }
 
 #pragma mark - ----> 事件
-
+/**
+ *  刷新Banner的数据
+ *
+ */
 - (void)handleReloadBannerButtonClicked:(UIButton*)sender{
     NSArray *items = nil;
     
@@ -170,6 +177,10 @@ static NSString *cellID = @"BannerTest";
     [banner setItems:items];
 }
 
+/**
+ *  改变RunLoop延迟的设置
+ *
+ */
 - (void)handleRunloopButtonClicked:(UIButton*)sender{
 
     sender.selected = !sender.selected;
